@@ -15,7 +15,7 @@ Once trained, the learned weights are stored in weights.csv file which will be l
 2.2 Training Data:
 
 The digits training data are extracted from digitised Bank of England archival discount ledger files (as shown in Figure 1):
-![ScreenShot](https://raw.github.com/boeml/ledgerrecogniser/master/readmeimages/figure 1.jpg)
+![ScreenShot](https://github.com/boeml/ledgerrecogniser/blob/master/readmeimages/figure%201.jpg)
 Figure 1. Digitised Bank of England Archival Discount Ledger File
 70 samples are randomly selected for each digit from these ledger files across 1847 to 1914, hence a total number of 700 training patterns have been produced. Each digit is converted to a binary image and then normalised to 28 x 28 pixels. The training data is saved in “ledgerdigits.cvs” file. 
  
