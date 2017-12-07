@@ -42,6 +42,7 @@ As the trained network model takes in 28 x 28 pixel sized images. Ideally the di
 The first processing task is to invert the image. The data in these ledger images are typically on white/yellow paper with a darker ink. Therefore we preform inversion by replacing each pixel value with 255 – original pixel value. The result looks like this:
 
 ![ScreenShot](https://github.com/boeml/ledgerrecogniser/blob/master/readmeimages/figure%204.jpg)
+
 Figure 4. Input image cropped area of numbers (left) and the resulting processed region (right)
 
 Then the first operation within a candidate region is for the image to be thresholded to produce a binary image. This is perform this using the OpenCV function:
@@ -61,13 +62,18 @@ Figure 6. Input image cropped area of numbers (left) and the resulting processed
 Then the original raw image is resampled at that point to extract a 20 x 20 pixel region. This region is copied into a blank (black) background template image of size 28 x 28. This is the template sent to the network for recognition:
 	DigitRecognizer::classify(image_template_28x28);
 The area recognition requires a bit of manual process as we are currently only focusing on digit recognition, user needs to select an area to be transcribed (which contains numbers only):
-![ScreenShot](https://github.com/boeml/ledgerrecogniser/blob/master/readmeimages/figure%207.jpg) 
+![ScreenShot](https://github.com/boeml/ledgerrecogniser/blob/master/readmeimages/figure%207.jpg)
+
 Figure 7: Area recognition on discount ledger images
-Algorithms have been implemented to automatically sort each digit object detected in the selected area from top to down and from left to right. Detected objects are also checked for their width and are broken down into small objects if it is out of certain range (for example the continuous 00s or 000s in figure 7).
+
+Algorithms have been implemented to automatically sort each digit object detected in the selected area from top to down and from left to right. Detected objects are also checked for their width and are broken down into small objects if it is out of certain range (for example the continuous 00s or 000s in figure 8).
 ![ScreenShot](https://github.com/boeml/ledgerrecogniser/blob/master/readmeimages/figure%208.jpg)
+
 Figure 8. Detected digit objects within selected area
+
 The tool will also save recognition results to a CSV file, results will look like below:
 ![ScreenShot](https://github.com/boeml/ledgerrecogniser/blob/master/readmeimages/figure%209.jpg)
+
 Figure 9. Results are saved in CSV file
 
 ## 4. Future Development Ideas:
