@@ -1,35 +1,37 @@
-#Digits Recognition Tool for Bank of England 19th Century Archival Discount Ledgers
+# Digits Recognition Tool for Bank of England 19th Century Archival Discount Ledgers
 
-##1. Libraries and Setup Details
+## 1. Libraries and Setup Details
 
-######The core image loading/processing and saving, as well as, auxiliary functionality is implemented by using the library: OpenCV 3.1 - http://opencv.org/ 
+The core image loading/processing and saving, as well as, auxiliary functionality is implemented by using the library: OpenCV 3.1 - http://opencv.org/ 
 The user interface and some of the directory/file management is done through the library Cinder 0.9 - https://libcinder.org/ 
 Cinder comes with an installation tool which also allows OpenCV installation, however, to be using the latest OpenCV version it is best to install separately.
 OpenCV provides the main functionality for working with images of archive pages. We use it to pre-process data, crop region, perform scaling and normalisation operations to get the data into a form where it can be passed onto the main recognition class.
 
-##2. Neural Network Recognition Tool:
+## 2. Neural Network Recognition Tool:
 
 The recognition tool is based on C++ implementation (suing OpenCV helper functions) and built in with a simple feed forward neural network trained with data extracted from digitised Bank of England archival discount ledger images directly. 
-###2.1 Feed-forward Neural Network:
+
+### 2.1 Feed-forward Neural Network:
 
 This simple feed-forward neural network is adapted from open source code project here. It has a structure of 784 x 20 x10 which can be changed in ArchiveParser.h file. The training digit images have been normalised to 28 x 28 pixels hence a total number of 784 inputs. 10 outputs are simply the 10 digits being trained (1, 2… to 0). We only tested on one layer of hidden neurons and found 20 hidden neurons produce relatively the better performance.
 Once trained, the learned weights are stored in weights.csv file which will be loaded automatically by the recognition tool and used in real time recognition when being initialised when app starts. 
-###2.2 Training Data:
+
+### 2.2 Training Data:
 
 The digits training data are extracted from digitised Bank of England archival discount ledger files (as shown in Figure 1):
 ![ScreenShot](https://github.com/boeml/ledgerrecogniser/blob/master/readmeimages/figure%201.jpg)
 
 Figure 1. Digitised Bank of England Archival Discount Ledger File
 
-######70 samples are randomly selected for each digit from these ledger files across 1847 to 1914, hence a total number of 700 training patterns have been produced. Each digit is converted to a binary image and then normalised to 28 x 28 pixels. The training data is saved in “ledgerdigits.cvs” file. 
+70 samples are randomly selected for each digit from these ledger files across 1847 to 1914, hence a total number of 700 training patterns have been produced. Each digit is converted to a binary image and then normalised to 28 x 28 pixels. The training data is saved in “ledgerdigits.cvs” file. 
 ![ScreenShot](https://github.com/boeml/ledgerrecogniser/blob/master/readmeimages/figure%202.jpg)
 Figure 2. Training patterns extracted from digitised BoE archival discount ledger files
 
 Due to the time constraints, we haven’t been able to produce more training patterns. We recommend that large number of training patterns will significantly improve the accuracy of the recognition. 
 
-##3. User Interface and Recognition Tool
+## 3. User Interface and Recognition Tool
 
-######The digit detection network is implemented as a class within a software tool that provides a user interface. The main reason for this is that detecting digits requires some manual interaction in order to guide the detector to appropriate regions and subsequently annotate the regions into useful data for analytics. 
+The digit detection network is implemented as a class within a software tool that provides a user interface. The main reason for this is that detecting digits requires some manual interaction in order to guide the detector to appropriate regions and subsequently annotate the regions into useful data for analytics. 
 The user interface allows loading of images and requires additional development to put it into full use and to structure the interaction of the user to the code that is embedded in the software. This is because interaction requires various levels eg. image zoom and movement, selection of image regions etc. While not complicated these take time to get right and require normalisation of coordinates/image regions to function properly.
 Currently, when the interface launches in the setup function both neural networks are loaded with pre-trained weights.  
 User can load a digitised discount ledger file using “Load Document” button, once loaded user can test a single digit recognition by single clicking on a digit, the tool will automatically detect the digit object, please use button “Single digit recognition” to see the recognition result. This single digit recognition function is purely for the development and research purposes as user can easily investigate how each digit is being selected and recognised. 
@@ -62,18 +64,18 @@ The area recognition requires a bit of manual process as we are currently only f
 ![ScreenShot](https://github.com/boeml/ledgerrecogniser/blob/master/readmeimages/figure%207.jpg) 
 Figure 7: Area recognition on discount ledger images
 Algorithms have been implemented to automatically sort each digit object detected in the selected area from top to down and from left to right. Detected objects are also checked for their width and are broken down into small objects if it is out of certain range (for example the continuous 00s or 000s in figure 7).
-![ScreenShot](https://github.com/boeml/ledgerrecogniser/blob/master/readmeimages/figure%208.jpg) 
+![ScreenShot](https://github.com/boeml/ledgerrecogniser/blob/master/readmeimages/figure%208.jpg)
 Figure 8. Detected digit objects within selected area
 The tool will also save recognition results to a CSV file, results will look like below:
 ![ScreenShot](https://github.com/boeml/ledgerrecogniser/blob/master/readmeimages/figure%209.jpg)
 Figure 9. Results are saved in CSV file
 
-##4. Future Development Ideas:
+## 4. Future Development Ideas:
 
-######The tool implemented/experimented some basic features of detecting and recognising hand written figures from the mid-nineteenth century Bank of England discount ledger files. We haven’t been able to develop/investigate detailed implementation of the tool due to time constrains. It however opens the door for anyone who is interested in helping us dig out more of these buried treasures and make the tool more widely usable.  
+The tool implemented/experimented some basic features of detecting and recognising hand written figures from the mid-nineteenth century Bank of England discount ledger files. We haven’t been able to develop/investigate detailed implementation of the tool due to time constrains. It however opens the door for anyone who is interested in helping us dig out more of these buried treasures and make the tool more widely usable.  
 Several possibilities for further development are:
 -	Make digits object detection more accurate: currently if a digit object doesn’t have enough outer/biding space, it won’t be detected as an object, i.e. if the digit object is connected to a column or row line like below:
-        ![ScreenShot](https://github.com/boeml/ledgerrecogniser/blob/master/readmeimages/figure%210.jpg)
+        ![ScreenShot](https://github.com/boeml/ledgerrecogniser/blob/master/readmeimages/figure%2010.jpg)
 -	Produce/use more training data: we’ve only created 700 training data so far by using the image ledgers, it would be useful to see the results produced from neural network trained with more data
 -	Allow user to design template to identify regions (with lines of rows and columns) which is applicable to a batch of similar files. This will automate the manual selection process of areas to recognise and enable batch processing of such files
 -	Can we extend the recognition from digits to letters (i.e. on counterparty names and other characters)?
