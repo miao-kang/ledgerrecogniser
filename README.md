@@ -93,11 +93,11 @@ The tool will also save recognition results to a CSV file, results will look lik
 
 ## 4. Future Development Ideas:
 
-<p align="justify">The tool implemented/experimented some basic features of detecting and recognising hand written figures from the mid-nineteenth century Bank of England discount ledger files. We haven’t been able to develop/investigate detailed implementation of the tool due to time constrains. It however opens the door for anyone who is interested in helping us dig out more of these buried treasures and make the tool more widely usable.  
+<p align="justify">The tool implemented/experimented some basic features of detecting and recognising hand written figures from the mid-nineteenth century Bank of England discount ledger files. We haven’t been able to develop/investigate detailed implementation of the tool due to time constrains. It however opens the door for anyone who is interested in helping us dig out more of these buried treasures and make the tool more widely usable.  </p>
 Several possibilities for further development are:
 -	Make digits object detection more accurate: currently if a digit object doesn’t have enough outer/biding space, it won’t be detected as an object, i.e. if the digit object is connected to a column or row line like below:
         ![ScreenShot](https://github.com/boeml/ledgerrecogniser/blob/master/readmeimages/figure%2010.jpg)
 -	Produce/use more training data: we’ve only created 700 training data so far by using the image ledgers, it would be useful to see the results produced from neural network trained with more data
 -	Allow user to design template to identify regions (with lines of rows and columns) which is applicable to a batch of similar files. This will automate the manual selection process of areas to recognise and enable batch processing of such files
 -	Can we extend the recognition from digits to letters (i.e. on counterparty names and other characters)?
-</p>  
+
