@@ -19,13 +19,16 @@ Once trained, the learned weights are stored in weights.csv file which will be l
 ### 2.2 Training Data:
 
 The digits training data are extracted from digitised Bank of England archival discount ledger files (as shown in Figure 1):
-![ScreenShot](https://github.com/boeml/ledgerrecogniser/blob/master/readmeimages/figure%201.jpg)
-
-Figure 1. Digitised Bank of England Archival Discount Ledger File
+<p align="center">
+  <img src="https://github.com/boeml/ledgerrecogniser/blob/master/readmeimages/figure%201.jpg">
+  <br>Figure 1. Digitised Bank of England Archival Discount Ledger File
+</p>
 
 70 samples are randomly selected for each digit from these ledger files across 1847 to 1914, hence a total number of 700 training patterns have been produced. Each digit is converted to a binary image and then normalised to 28 x 28 pixels. The training data is saved in “ledgerdigits.cvs” file. 
-![ScreenShot](https://github.com/boeml/ledgerrecogniser/blob/master/readmeimages/figure%202.jpg)
-Figure 2. Training patterns extracted from digitised BoE archival discount ledger files
+<p align="center">
+  <img src="https://github.com/boeml/ledgerrecogniser/blob/master/readmeimages/figure%202.jpg">
+  <br>Figure 2. Training patterns extracted from digitised BoE archival discount ledger files
+</p>
 
 Due to the time constraints, we haven’t been able to produce more training patterns. We recommend that large number of training patterns will significantly improve the accuracy of the recognition. 
 
@@ -35,46 +38,58 @@ The digit detection network is implemented as a class within a software tool tha
 The user interface allows loading of images and requires additional development to put it into full use and to structure the interaction of the user to the code that is embedded in the software. This is because interaction requires various levels eg. image zoom and movement, selection of image regions etc. While not complicated these take time to get right and require normalisation of coordinates/image regions to function properly.
 Currently, when the interface launches in the setup function both neural networks are loaded with pre-trained weights.  
 User can load a digitised discount ledger file using “Load Document” button, once loaded user can test a single digit recognition by single clicking on a digit, the tool will automatically detect the digit object, please use button “Single digit recognition” to see the recognition result. This single digit recognition function is purely for the development and research purposes as user can easily investigate how each digit is being selected and recognised. 
-![ScreenShot](https://github.com/boeml/ledgerrecogniser/blob/master/readmeimages/figure%203.jpg)
-Figure 3. Single digit recognition 
+<p align="center">
+  <img src="https://github.com/boeml/ledgerrecogniser/blob/master/readmeimages/figure%203.jpg">
+  <br>Figure 3. Single digit recognition 
+</p>
 
 As the trained network model takes in 28 x 28 pixel sized images. Ideally the digit should be centred in the image for best chances of correct recognition. To get the raw data into this form some pre-processing is required.
 The first processing task is to invert the image. The data in these ledger images are typically on white/yellow paper with a darker ink. Therefore we preform inversion by replacing each pixel value with 255 – original pixel value. The result looks like this:
 
-![ScreenShot](https://github.com/boeml/ledgerrecogniser/blob/master/readmeimages/figure%204.jpg)
-
-Figure 4. Input image cropped area of numbers (left) and the resulting processed region (right)
+<p align="center">
+  <img src="https://github.com/boeml/ledgerrecogniser/blob/master/readmeimages/figure%204.jpg">
+  <br>Figure 4. Input image cropped area of numbers (left) and the resulting processed region (right)
+</p>
 
 Then the first operation within a candidate region is for the image to be thresholded to produce a binary image. This is perform this using the OpenCV function:
 	cv::threshold(image, image, 140, 255, THRESH_TOZERO);
 The resulting image will look something like this:
 
-![ScreenShot](https://github.com/boeml/ledgerrecogniser/blob/master/readmeimages/figure%205.jpg)   
-Figure 5. Input image cropped area of numbers (left) and the resulting processed region (right)
+<p align="center">
+  <img src="https://github.com/boeml/ledgerrecogniser/blob/master/readmeimages/figure%205.jpg">
+  <br>Figure 5. Input image cropped area of numbers (left) and the resulting processed region (right)
+</p>
 
 The values of the thresholding can be varied and would impact on the performance of the algorithm. Additionally the method of thresholding can also be changed. In a more complex implementation instead of thresholding classification algorithms could be used to perform better ink / paper segmentation and potentially introduce spatial regularisation/connectivity.
 The binary image is then passed to a contour finding function, which aims to essentially find the outer contour of the digit and allow us to compute the convex hull or bounding box, which can then be used to estimate the digit centre. Again, this is performed using OpenCV through the function:
 cv::findContours(image, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
 From the extracted contour, one is able to get the centre of the candidate digit by computing the bounding box of the individual contours:
-![ScreenShot](https://github.com/boeml/ledgerrecogniser/blob/master/readmeimages/figure%206.jpg)    
-Figure 6. Input image cropped area of numbers (left) and the resulting processed region (right)
+<p align="center">
+  <img src="https://github.com/boeml/ledgerrecogniser/blob/master/readmeimages/figure%206.jpg">
+  <br>Figure 6. Input image cropped area of numbers (left) and the resulting processed region (right)
+</p>  
 
 Then the original raw image is resampled at that point to extract a 20 x 20 pixel region. This region is copied into a blank (black) background template image of size 28 x 28. This is the template sent to the network for recognition:
 	DigitRecognizer::classify(image_template_28x28);
 The area recognition requires a bit of manual process as we are currently only focusing on digit recognition, user needs to select an area to be transcribed (which contains numbers only):
-![ScreenShot](https://github.com/boeml/ledgerrecogniser/blob/master/readmeimages/figure%207.jpg)
 
-Figure 7: Area recognition on discount ledger images
+<p align="center">
+  <img src="https://github.com/boeml/ledgerrecogniser/blob/master/readmeimages/figure%207.jpg">
+  <br>Figure 7: Area recognition on discount ledger images
+</p>  
 
 Algorithms have been implemented to automatically sort each digit object detected in the selected area from top to down and from left to right. Detected objects are also checked for their width and are broken down into small objects if it is out of certain range (for example the continuous 00s or 000s in figure 8).
-![ScreenShot](https://github.com/boeml/ledgerrecogniser/blob/master/readmeimages/figure%208.jpg)
 
-Figure 8. Detected digit objects within selected area
+<p align="center">
+  <img src="https://github.com/boeml/ledgerrecogniser/blob/master/readmeimages/figure%208.jpg">
+  <br>Figure 8. Detected digit objects within selected area
+</p>  
 
 The tool will also save recognition results to a CSV file, results will look like below:
-![ScreenShot](https://github.com/boeml/ledgerrecogniser/blob/master/readmeimages/figure%209.jpg)
-
-Figure 9. Results are saved in CSV file
+<p align="center">
+  <img src="https://github.com/boeml/ledgerrecogniser/blob/master/readmeimages/figure%209.jpg">
+  <br>Figure 9. Results are saved in CSV file
+</p>  
 
 ## 4. Future Development Ideas:
 
