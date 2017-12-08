@@ -7,6 +7,7 @@ The user interface and some of the directory/file management is done through the
 Cinder comes with an installation tool which also allows OpenCV installation, however, to be using the latest OpenCV version it is best to install separately.
 OpenCV provides the main functionality for working with images of archive pages. We use it to pre-process data, crop region, perform scaling and normalisation operations to get the data into a form where it can be passed onto the main recognition class.
 </p>
+
 ## 2. Neural Network Recognition Tool:
 
 <p align="justify">The recognition tool is based on C++ implementation (suing OpenCV helper functions) and built in with a simple feed forward neural network trained with data extracted from digitised Bank of England archival discount ledger images directly. </p>  
